@@ -47,9 +47,16 @@ Tokenization affects:
 Both models are trained on the **FineWeb dataset**, which consists of diverse web-scale text.
 
 ### Evaluation Data
-We evaluate on **WikiText-2**, a clean and structured dataset derived from Wikipedia articles.
+We evaluate both models on a shared subset of WikiText-2 corresponding to a fixed amount of text.
 
-This setup introduces a **cross-domain evaluation scenario**, allowing us to measure generalization.
+Due to differences in tokenization schemes, the number of evaluated tokens varies:
+
+- 37M model: 190,965 tokens  
+- 53M model: 136,406 tokens  
+
+This discrepancy is expected as the models use tokenizers with different vocabulary sizes (~20k vs ~100k). Importantly, both models are evaluated on the same underlying text to ensure a fair comparison.
+
+This setup introduces a **cross-domain evaluation scenario** allowing us to measure generalization.
 
 ## 5. Metrics
 
@@ -80,8 +87,8 @@ Represents the average number of bits required to encode each token.
 
 | Model | Loss   | Perplexity | BPT  |
 |------|--------|------------|------|
-| 37M  | 5.3501 | 210.62     | 7.72 |
-| 53M  | 6.6362 | 762.17     | 9.57 |
+| 37M  | 5.3537 | 211.38     | 7.72 |
+| 53M  | 6.6659 | 785.21     | 9.62 |
 
 
 ## 7. Discussion
@@ -114,6 +121,7 @@ The 37M model benefits from a longer context window (256 vs 128), allowing it to
 - Parameter count alone is a weak proxy for performance
 
 
+
 ## 9. Conclusion
 
 We show that a smaller transformer model can outperform a larger one when architectural design and training dynamics are more favorable. In a cross-domain setting, the 37M model demonstrates significantly better generalization than the 53M model.
@@ -130,6 +138,7 @@ These results emphasize the importance of model design choices beyond scaling pa
 - Explore architectural improvements (RMSNorm, attention variants)
 
 
+
 ## Appendix (Optional)
 
 ### Model Implementation Notes
@@ -137,7 +146,6 @@ These results emphasize the importance of model design choices beyond scaling pa
 - Transformer-based causal LM
 - Trained on FineWeb
 - Evaluated without fine-tuning on WikiText-2
-
 
 ## Pretrained Model
 
