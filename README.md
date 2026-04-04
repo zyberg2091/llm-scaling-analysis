@@ -6,7 +6,7 @@ We present an empirical comparison of two small transformer-based language model
 
 While scaling laws suggest that larger models should perform better under controlled settings, we observe that the 37M model achieves lower loss, perplexity, and bits-per-token (BPT) than the 53M model in this setup. However, the models differ not only in parameter count, but also in architectural design (depth, embedding dimension, and context length) and tokenization.
 
-These results indicate that performance differences in small-scale regimes cannot be attributed to parameter count alone, and highlight the influence of architectural and tokenization choices, particularly under distribution shift.
+These results suggest that, in small-scale regimes, performance differences are influenced less by parameter count alone and more by how model capacity is distributed across architectural components and token representation.
 
 ---
 
@@ -16,7 +16,7 @@ Scaling laws in language modeling indicate that increasing parameter count impro
 
 In this work, we study a setting where these factors vary simultaneously. We compare two models trained on the same dataset but with different architectural configurations and tokenization schemes, and evaluate them on a different domain.
 
-Our goal is not to isolate a single causal factor, but to examine how these design choices jointly affect performance in a realistic, non-controlled setting.
+Our goal is not to isolate a single causal factor, but to understand how these design choices interact in practical settings where such constraints are unavoidable.
 
 We focus on:
 
@@ -132,13 +132,15 @@ The evaluation is performed under a distribution shift (FineWeb → WikiText-2).
 
 ### 7.3 Tokenization Effects
 
-The 53M model uses a significantly larger vocabulary (~100k vs ~20k), which increases the difficulty of next-token prediction and affects token-level metrics. While this likely contributes to the observed performance gap, it does not fully account for it.
+The 53M model uses a significantly larger vocabulary (~100k vs ~20k), which increases the difficulty of next-token prediction and affects token-level metrics.
+
+However, the magnitude of the performance gap suggests that tokenization alone is not sufficient to explain the difference. In this setup, increased token complexity combined with reduced architectural capacity appears to play a more significant role.
 
 ---
 
 ### 7.4 Context Length
 
-The 37M model uses a longer context window (256 vs 128), allowing it to condition on more prior tokens. This may contribute to improved performance, particularly in cross-domain evaluation.
+The 37M model uses a longer context window (256 vs 128), allowing it to condition on more prior tokens. This likely contributes to improved performance, particularly in cross-domain evaluation.
 
 ---
 
@@ -151,24 +153,34 @@ The 37M model uses a longer context window (256 vs 128), allowing it to conditio
 
 ---
 
-## 9. Key Observations
+## 9. Coupled Design Trade-off
 
-- Parameter count alone is not sufficient to explain performance differences in this setting  
-- Architectural configuration (depth, width, context length) appears to play a significant role  
-- Tokenization impacts both sequence structure and evaluation metrics  
+In this setup, tokenizer vocabulary size and architectural capacity are not independent, but are coupled through the shared parameter budget.
+
+A larger vocabulary (as in the 53M model) increases the number of parameters allocated to embedding and output layers, reducing the capacity available for depth and hidden dimensions. Conversely, a smaller vocabulary allows more parameters to be allocated toward deeper architectures and longer context.
+
+This coupling means that tokenization and architecture jointly determine how model capacity is used. As a result, performance differences in small-scale models are influenced not just by individual design choices, but by how these choices interact under a fixed parameter budget.
+
+---
+
+## 10. Key Observations
+
+- Parameter count alone does not explain performance differences in this setting  
+- Architectural configuration (depth, width, context length) plays a significant role  
+- Tokenization affects both sequence structure and evaluation metrics  
 - Cross-domain evaluation highlights differences in generalization across configurations  
 
 ---
 
-## 10. Conclusion
+## 11. Conclusion
 
-We present a comparative analysis of two small language models under a cross-domain evaluation setting. While the smaller model achieves better performance, the results emphasize the role of architectural and tokenization choices in shaping model behavior.
+We present a comparative analysis of two small language models under a cross-domain evaluation setting. While the smaller model achieves better performance, the results suggest that performance is shaped more by how model capacity is distributed than by scale alone.
 
-Future work should focus on controlled experiments to isolate individual factors and better understand their contributions.
+In particular, architectural and tokenization choices appear to interact in ways that significantly influence behavior in small-scale regimes.
 
 ---
 
-## 11. Future Work
+## 12. Future Work
 
 - Train both models with the same tokenizer for controlled comparison  
 - Isolate architectural variables while scaling parameter count  
