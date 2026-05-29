@@ -111,7 +111,7 @@ Represents the average number of bits required to encode each token.
 
 | Model | Loss   | Perplexity | BPT  |
 |------|--------|------------|------|
-| 37M  | 5.3537 | 211.38     | 7.72 |
+| 37M  | 5.3537 | 101.40    | 6.67 |
 | 53M  | 6.6659 | 785.21     | 9.62 |
 
 ---
